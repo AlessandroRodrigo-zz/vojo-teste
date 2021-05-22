@@ -1,13 +1,13 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Home from './pages/home';
+import { HashRouter, Route, Switch } from 'react-router-dom';
+import Feed from './pages/feed';
 
 export default function App(): JSX.Element {
   return (
-    <Router>
+    <HashRouter hashType={'slash'}>
       <Switch>
-        <Route path={'/'} exact component={Home} />
+        <Route path={'/'} exact component={Feed} />
       </Switch>
-    </Router>
+    </HashRouter>
   );
 }
