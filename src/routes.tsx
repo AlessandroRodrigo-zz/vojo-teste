@@ -3,6 +3,7 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import Feed from './pages/feed';
 import Navbar from './components/ui/organisms/navbar';
 import SignIn from './pages/sign_in';
+import SignUp from './pages/sign_up';
 
 export default function App(): JSX.Element {
   return (
@@ -11,6 +12,7 @@ export default function App(): JSX.Element {
         <Switch>
           <Route path={'/'} exact component={Feed} />
           <Route path={'/login'} exact component={SignIn} />
+          <Route path={'/register'} exact component={SignUp} />
         </Switch>
       </Navbar>
     </HashRouter>

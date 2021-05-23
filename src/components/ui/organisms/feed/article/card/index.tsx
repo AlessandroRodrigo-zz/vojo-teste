@@ -16,6 +16,7 @@ function FeedArticleCard({ article }: { article: IArticle }): JSX.Element {
       borderRadius={'md'}
       padding={'5'}
       position={'relative'}
+      bg={'white'}
     >
       <HStack spacing={'4'} alignItems={'flex-start'}>
         <Image

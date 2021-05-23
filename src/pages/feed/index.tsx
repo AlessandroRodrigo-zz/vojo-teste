@@ -7,15 +7,17 @@ function Feed(): JSX.Element {
   const controller = useFeedController();
 
   return (
-    <Box padding={4} maxW={1200} mx={'auto'}>
-      <Text fontSize={'2xl'} fontWeight={'bold'} color={'gray.700'}>
-        Feed de artigos
-      </Text>
+    <Box bg={'gray.50'} flex={1}>
+      <Box padding={4} maxW={1200} mx={'auto'}>
+        <Text fontSize={'2xl'} fontWeight={'bold'} color={'gray.700'}>
+          Feed de artigos
+        </Text>
 
-      <Stack spacing={'4'} marginTop={'6'}>
-        {controller.state.articles &&
-          controller.state.articles.map((item) => <FeedArticleCard article={item} key={item.slug} />)}
-      </Stack>
+        <Stack spacing={'4'} marginTop={'6'}>
+          {controller.state.articles &&
+            controller.state.articles.map((item) => <FeedArticleCard article={item} key={item.slug} />)}
+        </Stack>
+      </Box>
     </Box>
   );
 }
