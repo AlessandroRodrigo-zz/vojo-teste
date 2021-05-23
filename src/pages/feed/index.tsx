@@ -1,23 +1,37 @@
 import React from 'react';
 import useFeedController from './FeedController';
 import FeedArticleCard from 'src/components/ui/organisms/feed/article/card';
-import { Box, Stack, Text } from '@chakra-ui/react';
+import { Badge, Box, Button, Flex, HStack, SimpleGrid, Stack, Wrap, WrapItem } from '@chakra-ui/react';
 
 function Feed(): JSX.Element {
   const controller = useFeedController();
 
   return (
     <Box bg={'gray.50'} flex={1}>
-      <Box padding={4} maxW={1200} mx={'auto'}>
-        <Text fontSize={'2xl'} fontWeight={'bold'} color={'gray.700'}>
-          Feed de artigos
-        </Text>
-
-        <Stack spacing={'4'} marginTop={'6'}>
+      <HStack spacing={'4'} padding={4} maxW={1200} mx={'auto'} alignItems={'flex-start'} marginTop={'6'}>
+        <Stack spacing={'4'} w={'70%'}>
           {controller.state.articles &&
             controller.state.articles.map((item) => <FeedArticleCard article={item} key={item.slug} />)}
         </Stack>
-      </Box>
+        <Box p={'5'} w={'30%'} bg={'white'} borderWidth={'1px'} borderRadius={'md'}>
+          <Wrap spacing={2}>
+            {controller.state.tags &&
+              controller.state.tags.map((item) => (
+                <WrapItem key={item}>
+                  <Button
+                    size={'xs'}
+                    cursor={'pointer'}
+                    textTransform={'uppercase'}
+                    fontWeight={'bold'}
+                    borderRadius={'xl'}
+                  >
+                    {item}
+                  </Button>
+                </WrapItem>
+              ))}
+          </Wrap>
+        </Box>
+      </HStack>
     </Box>
   );
 }
