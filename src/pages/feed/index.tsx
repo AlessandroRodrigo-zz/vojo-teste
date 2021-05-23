@@ -7,7 +7,7 @@ function Feed(): JSX.Element {
   const controller = useFeedController();
 
   return (
-    <Box padding={4}>
+    <Box padding={4} maxW={1200} mx={'auto'}>
       <Text fontSize={'2xl'} fontWeight={'bold'} color={'gray.700'}>
         Feed de artigos
       </Text>
