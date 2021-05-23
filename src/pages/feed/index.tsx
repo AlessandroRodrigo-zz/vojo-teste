@@ -1,7 +1,7 @@
 import React from 'react';
 import useFeedController from './FeedController';
 import FeedArticleCard from 'src/components/ui/organisms/feed/article/card';
-import { Badge, Box, Button, Flex, HStack, SimpleGrid, Stack, Wrap, WrapItem } from '@chakra-ui/react';
+import { Box, Button, HStack, Stack, Wrap, WrapItem } from '@chakra-ui/react';
 
 function Feed(): JSX.Element {
   const controller = useFeedController();
