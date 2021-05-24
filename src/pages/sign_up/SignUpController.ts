@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import UserRepository from 'src/repositories/UserRepository';
-import { useToast } from '@chakra-ui/react';
-import { useUser } from 'src/contexts/user_context';
+import { useUser } from 'src/hooks/use_user';
 import { useHistory } from 'react-router-dom';
+import { useDefaultToast } from '../../hooks/use_default_toast';
 
 interface ISignUpControllerState {
   loading: boolean;
@@ -19,7 +19,7 @@ export default function useSignUpController(): TSignUpController {
   const [state, setState] = useState<ISignUpControllerState>({ loading: false });
   const { setUser } = useUser();
   const history = useHistory();
-  const toast = useToast({ isClosable: true, duration: 2000, position: 'bottom', variant: 'solid' });
+  const toast = useDefaultToast();
 
   const submitFormHandler = useCallback(
     async ({ username, email, password }: { email: string; username: string; password: string }) => {
@@ -30,13 +30,13 @@ export default function useSignUpController(): TSignUpController {
 
         setUser({ ...createdUser.data.user });
 
-        history.push({ pathname: '/' });
-
         toast({
           title: 'Cadastro realizado com sucesso!',
           description: 'Parabéns, agora você será redirecionado para o seu feed',
           status: 'success',
         });
+
+        history.push({ pathname: '/' });
       } catch (e) {
         console.error(e);
         toast({

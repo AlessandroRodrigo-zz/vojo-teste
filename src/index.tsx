@@ -2,7 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './routes';
-import { UserProvider } from './contexts/user_context';
+import { UserProvider } from './hooks/use_user';
 
 ReactDOM.render(
   <React.StrictMode>
