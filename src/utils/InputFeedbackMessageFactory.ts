@@ -1,4 +1,4 @@
-export default class FeedbackMessageFactory {
+export default class InputFeedbackMessageFactory {
   public static requiredFeedbackFactory(fieldName: string, optionalMessage?: string): string {
     if (optionalMessage) return optionalMessage;
 

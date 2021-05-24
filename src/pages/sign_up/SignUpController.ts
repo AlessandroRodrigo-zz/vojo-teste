@@ -4,7 +4,7 @@ import UserRepository from 'src/repositories/UserRepository';
 import { useUser } from 'src/hooks/use_user';
 import { useHistory } from 'react-router-dom';
 import { useDefaultToast } from '../../hooks/use_default_toast';
-import FeedbackMessageFactory from '../../utils/FeedbackMessageFactory';
+import InputFeedbackMessageFactory from '../../utils/InputFeedbackMessageFactory';
 
 interface ISignUpControllerState {
   loading: boolean;
@@ -56,10 +56,10 @@ export default function useSignUpController(): TSignUpController {
     return yup.object().shape({
       email: yup
         .string()
-        .email(FeedbackMessageFactory.emailFeedbackFactory())
-        .required(FeedbackMessageFactory.requiredFeedbackFactory('e-mail')),
-      username: yup.string().required(FeedbackMessageFactory.requiredFeedbackFactory('usuário')),
-      password: yup.string().required(FeedbackMessageFactory.requiredFeedbackFactory('senha')),
+        .email(InputFeedbackMessageFactory.emailFeedbackFactory())
+        .required(InputFeedbackMessageFactory.requiredFeedbackFactory('e-mail')),
+      username: yup.string().required(InputFeedbackMessageFactory.requiredFeedbackFactory('usuário')),
+      password: yup.string().required(InputFeedbackMessageFactory.requiredFeedbackFactory('senha')),
     });
   }, []);
 

@@ -4,7 +4,7 @@ import SessionRepository from '../../repositories/SessionRepository';
 import { useUser } from '../../hooks/use_user';
 import { useDefaultToast } from '../../hooks/use_default_toast';
 import { useHistory } from 'react-router-dom';
-import FeedbackMessageFactory from '../../utils/FeedbackMessageFactory';
+import InputFeedbackMessageFactory from '../../utils/InputFeedbackMessageFactory';
 import Feed from '../feed';
 
 interface ISignInControllerState {
@@ -55,9 +55,9 @@ export default function useSignInController(): TSignInController {
     return yup.object().shape({
       email: yup
         .string()
-        .email(FeedbackMessageFactory.emailFeedbackFactory())
-        .required(FeedbackMessageFactory.requiredFeedbackFactory('e-mail')),
-      password: yup.string().required(FeedbackMessageFactory.requiredFeedbackFactory('senha')),
+        .email(InputFeedbackMessageFactory.emailFeedbackFactory())
+        .required(InputFeedbackMessageFactory.requiredFeedbackFactory('e-mail')),
+      password: yup.string().required(InputFeedbackMessageFactory.requiredFeedbackFactory('senha')),
     });
   }, []);
 
