@@ -4,6 +4,7 @@ import UserRepository from 'src/repositories/UserRepository';
 import { useUser } from 'src/hooks/use_user';
 import { useHistory } from 'react-router-dom';
 import { useDefaultToast } from '../../hooks/use_default_toast';
+import FeedbackMessageFactory from '../../utils/FeedbackMessageFactory';
 
 interface ISignUpControllerState {
   loading: boolean;
@@ -53,9 +54,12 @@ export default function useSignUpController(): TSignUpController {
 
   const formValidateRules: {} = useMemo(() => {
     return yup.object().shape({
-      email: yup.string().email('Insira um e-mail válido, por favor').required('Preencha o campo de e-mail, por favor'),
-      username: yup.string().required('Preencha o campo de usuário, por favor'),
-      password: yup.string().required('Preencha o campo de senha, por favor'),
+      email: yup
+        .string()
+        .email(FeedbackMessageFactory.emailFeedbackFactory())
+        .required(FeedbackMessageFactory.requiredFeedbackFactory('e-mail')),
+      username: yup.string().required(FeedbackMessageFactory.requiredFeedbackFactory('usuário')),
+      password: yup.string().required(FeedbackMessageFactory.requiredFeedbackFactory('senha')),
     });
   }, []);
 

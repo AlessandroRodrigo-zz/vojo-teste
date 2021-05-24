@@ -4,6 +4,8 @@ import SessionRepository from '../../repositories/SessionRepository';
 import { useUser } from '../../hooks/use_user';
 import { useDefaultToast } from '../../hooks/use_default_toast';
 import { useHistory } from 'react-router-dom';
+import FeedbackMessageFactory from '../../utils/FeedbackMessageFactory';
+import Feed from '../feed';
 
 interface ISignInControllerState {
   loading: boolean;
@@ -51,8 +53,11 @@ export default function useSignInController(): TSignInController {
 
   const formValidateRules: {} = useMemo(() => {
     return yup.object().shape({
-      email: yup.string().email('Insira um e-mail válido, por favor').required('Preencha o campo de e-mail, por favor'),
-      password: yup.string().required('Preencha o campo de senha, por favor'),
+      email: yup
+        .string()
+        .email(FeedbackMessageFactory.emailFeedbackFactory())
+        .required(FeedbackMessageFactory.requiredFeedbackFactory('e-mail')),
+      password: yup.string().required(FeedbackMessageFactory.requiredFeedbackFactory('senha')),
     });
   }, []);
 
