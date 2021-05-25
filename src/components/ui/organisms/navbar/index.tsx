@@ -2,32 +2,8 @@ import { Box, Button, HStack, Stack, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import React from 'react';
 import useNavbarController from './NavbarController';
-
-const connectedUserOptions = (): JSX.Element => {
-  return <div>teste</div>;
-};
-
-const disconnectedUserOptions = (): JSX.Element => {
-  return (
-    <>
-      <Button as={NavLink} to={'/login'} variant={'link'} color={'white'} opacity={0.7} activeStyle={{ opacity: 1 }}>
-        Entrar
-      </Button>
-
-      <Button
-        as={NavLink}
-        to={'/register'}
-        exact
-        opacity={0.7}
-        activeStyle={{ opacity: 1 }}
-        variant={'link'}
-        color={'white'}
-      >
-        Cadastrar
-      </Button>
-    </>
-  );
-};
+import connectedUserOptions from 'src/components/ui/molecules/navbar/connected_user_options';
+import disconnectedUserOptions from 'src/components/ui/molecules/navbar/disconnected_user_options';
 
 const Navbar: React.FunctionComponent = ({ children }): JSX.Element => {
   const controller = useNavbarController();
@@ -40,15 +16,16 @@ const Navbar: React.FunctionComponent = ({ children }): JSX.Element => {
             VOJO Blog
           </Text>
 
-          <HStack spacing={8}>
+          <HStack spacing={2}>
             <Button
               as={NavLink}
               to={'/'}
               exact
-              opacity={0.7}
-              activeStyle={{ opacity: 1 }}
-              variant={'link'}
               color={'white'}
+              bg={'transparent'}
+              activeStyle={{ background: 'white', color: 'black' }}
+              variant={'solid'}
+              _hover={{ color: 'black', bg: 'white' }}
             >
               Início
             </Button>

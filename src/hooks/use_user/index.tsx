@@ -19,7 +19,20 @@ const UserProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
   const [user, setUser] = useState<IUser>({ username: '', email: '' });
 
   useEffect(() => {
-    localStorage.setItem('@user', JSON.stringify(user));
+    const storageUser = localStorage.getItem('@user');
+
+    if (storageUser) {
+      const formattedUser = JSON.parse(storageUser);
+      setUser({ ...formattedUser });
+    }
+  }, []);
+
+  useEffect(() => {
+    const storageUser = localStorage.getItem('@user');
+
+    if (storageUser !== JSON.stringify(user)) {
+      localStorage.setItem('@user', JSON.stringify(user));
+    }
   }, [user]);
 
   return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;

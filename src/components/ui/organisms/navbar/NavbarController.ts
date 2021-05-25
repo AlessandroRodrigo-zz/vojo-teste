@@ -10,7 +10,7 @@ export default function useNavbarController(): TNavbarController {
 
   const hasConnectedUser = useMemo(() => {
     return !!user.token;
-  }, []);
+  }, [user]);
 
   return {
     hasConnectedUser,
