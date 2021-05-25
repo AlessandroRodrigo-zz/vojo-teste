@@ -62,7 +62,7 @@ function FeedArticleCard({ article }: { article: IArticle }): JSX.Element {
         <IconButton
           icon={<Icon as={MdFavoriteBorder} />}
           aria-label={'favorite'}
-          onClick={(event) => event.stopPropagation()}
+          onClick={() => controller.favoriteHandler(article.slug)}
         />
       </Box>
     </Box>
