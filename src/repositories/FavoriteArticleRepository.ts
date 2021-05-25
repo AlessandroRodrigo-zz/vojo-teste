@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import AbstractRepository from './AbstractRepository';
 
-class FavoriteRepository extends AbstractRepository {
+class FavoriteArticleRepository extends AbstractRepository {
   async create(slug: string): Promise<{
     headers: any;
     request?: any;
@@ -11,10 +11,10 @@ class FavoriteRepository extends AbstractRepository {
     config: AxiosRequestConfig;
     status: number;
   }> {
-    const response = await this.api.post(`/${slug}/favorite`);
+    const response = await this.api.post(`/articles/${slug}/favorite`);
 
     return { error: false, ...response };
   }
 }
 
-export default new FavoriteRepository();
+export default new FavoriteArticleRepository();

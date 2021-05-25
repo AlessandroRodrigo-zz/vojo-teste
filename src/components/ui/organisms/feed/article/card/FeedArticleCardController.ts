@@ -3,7 +3,7 @@ import { IArticle } from 'src/entities/Article';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useDefaultToast } from '../../../../../../hooks/use_default_toast';
-import FavoriteRepository from '../../../../../../repositories/FavoriteRepository';
+import FavoriteRepository from '../../../../../../repositories/FavoriteArticleRepository';
 
 type TFeedArticleCardController = {
   getFormattedCreatedAtArticle: string;
