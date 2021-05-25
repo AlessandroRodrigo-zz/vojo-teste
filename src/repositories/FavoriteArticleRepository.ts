@@ -15,6 +15,20 @@ class FavoriteArticleRepository extends AbstractRepository {
 
     return { error: false, ...response };
   }
+
+  async delete(slug: string): Promise<{
+    headers: any;
+    request?: any;
+    data: any;
+    statusText: string;
+    error: boolean;
+    config: AxiosRequestConfig;
+    status: number;
+  }> {
+    const response = await this.api.delete(`/articles/${slug}/favorite`);
+
+    return { error: false, ...response };
+  }
 }
 
 export default new FavoriteArticleRepository();

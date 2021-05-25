@@ -20,15 +20,15 @@ function FeedArticleCard({ article }: { article: IArticle }): JSX.Element {
     >
       <HStack spacing={'4'} alignItems={'flex-start'}>
         <Image
-          src={article.author.image ?? 'https://w.wallhaven.cc/full/28/wallhaven-2813r9.png'}
+          src={controller.state.statedArticle.author.image ?? 'https://w.wallhaven.cc/full/28/wallhaven-2813r9.png'}
           borderRadius={'50%'}
           boxSize={50}
           objectFit={'cover'}
-          alt={article.author.username}
+          alt={controller.state.statedArticle.author.username}
         />
         <Box>
           <Text fontSize={'lg'} fontWeight={'bold'} color={'teal.600'}>
-            {article.author.username}
+            {controller.state.statedArticle.author.username}
           </Text>
           <Text fontSize={'sm'} color={'gray.500'}>
             {controller.getFormattedCreatedAtArticle}
@@ -37,8 +37,8 @@ function FeedArticleCard({ article }: { article: IArticle }): JSX.Element {
       </HStack>
 
       <HStack mt={'3'} borderRadius={'lg'}>
-        {article.tagList &&
-          article.tagList.map((item) => (
+        {controller.state.statedArticle.tagList &&
+          controller.state.statedArticle.tagList.map((item) => (
             <Badge borderRadius={'lg'} px={'2'} key={item}>
               {item}
             </Badge>
@@ -47,11 +47,11 @@ function FeedArticleCard({ article }: { article: IArticle }): JSX.Element {
 
       <Stack marginTop={'4'} spacing={0}>
         <Text noOfLines={2} fontSize={'xl'} fontWeight={'bold'} color={'gray.600'}>
-          {article.title}
+          {controller.state.statedArticle.title}
         </Text>
 
         <Text noOfLines={4} fontSize={'md'} fontWeight={'normal'}>
-          {article.description}
+          {controller.state.statedArticle.description}
         </Text>
       </Stack>
       <Button mt={'2'} variant={'link'} w={'fit-content'}>
@@ -60,9 +60,11 @@ function FeedArticleCard({ article }: { article: IArticle }): JSX.Element {
 
       <Box position={'absolute'} top={'1.25rem'} right={'1.25rem'}>
         <IconButton
-          icon={<Icon as={MdFavoriteBorder} />}
+          icon={<Icon as={controller.state.statedArticle.favorited ? MdFavorite : MdFavoriteBorder} />}
+          colorScheme={controller.state.statedArticle.favorited ? 'teal' : undefined}
           aria-label={'favorite'}
-          onClick={() => controller.favoriteHandler(article.slug)}
+          isLoading={controller.state.favoriteButtonLoading}
+          onClick={() => controller.favoriteHandler(controller.state.statedArticle.slug)}
         />
       </Box>
     </Box>
