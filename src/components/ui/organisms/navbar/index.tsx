@@ -2,8 +2,8 @@ import { Box, Button, HStack, Stack, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import React from 'react';
 import useNavbarController from './NavbarController';
-import connectedUserOptions from 'src/components/ui/molecules/navbar/connected_user_options';
-import disconnectedUserOptions from 'src/components/ui/molecules/navbar/disconnected_user_options';
+import ConnectedUserOptions from 'src/components/ui/molecules/navbar/connected_user_options';
+import DisconnectedUserOptions from 'src/components/ui/molecules/navbar/disconnected_user_options';
 
 const Navbar: React.FunctionComponent = ({ children }): JSX.Element => {
   const controller = useNavbarController();
@@ -29,7 +29,7 @@ const Navbar: React.FunctionComponent = ({ children }): JSX.Element => {
             >
               Início
             </Button>
-            {controller.hasConnectedUser ? connectedUserOptions() : disconnectedUserOptions()}
+            {controller.hasConnectedUser ? <ConnectedUserOptions /> : <DisconnectedUserOptions />}
           </HStack>
         </HStack>
       </Box>

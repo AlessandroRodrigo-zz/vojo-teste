@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import React from 'react';
 
-const disconnectedUserOptions = (): JSX.Element => {
+const DisconnectedUserOptions = (): JSX.Element => {
   return (
     <>
       <Button
@@ -33,4 +33,4 @@ const disconnectedUserOptions = (): JSX.Element => {
   );
 };
 
-export default disconnectedUserOptions;
+export default DisconnectedUserOptions;
