@@ -1,20 +1,32 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import ArticleRepository from 'src/repositories/ArticleRepository';
-import { useToast } from '@chakra-ui/react';
 import { IArticle } from 'src/entities/Article';
 import TagRepository from 'src/repositories/TagRepository';
+import { useDefaultToast } from 'src/hooks/use_default_toast';
+
+interface IFeedControllerState {
+  feedArticles: IArticle[];
+  personalFeedArticles: IArticle[];
+  tags: string[];
+}
 
 type TFeedController = {
-  state: { articles: IArticle[]; tags: string[] };
-  setState: Dispatch<SetStateAction<{ articles: IArticle[]; tags: string[] }>>;
+  state: IFeedControllerState;
+  setState: Dispatch<SetStateAction<IFeedControllerState>>;
+  getArticlesFeedHandler: (limit: number, offset: number) => Promise<{ articles: IArticle[]; articlesCount: number }>;
+  getArticlesPersonalFeedHandler: (
+    limit: number,
+    offset: number,
+  ) => Promise<{ articles: IArticle[]; articlesCount: number }>;
 };
 
 export default function useFeedController(): TFeedController {
-  const [state, setState] = useState<{ articles: IArticle[]; tags: string[] }>({
-    articles: [],
+  const [state, setState] = useState<IFeedControllerState>({
+    feedArticles: [],
+    personalFeedArticles: [],
     tags: [],
   });
-  const toast = useToast();
+  const toast = useDefaultToast();
 
   useEffect(() => {
     mountHandler();
@@ -22,31 +34,54 @@ export default function useFeedController(): TFeedController {
 
   async function mountHandler() {
     try {
-      await Promise.allSettled([getArticlesHandler(), getTagsHandler()]);
+      await Promise.allSettled([getTagsHandler()]);
     } catch (e) {
-      console.error(e.message);
-      toast({ title: e.message, duration: 2000, status: 'error', isClosable: true });
+      mountErrorHandler(e);
     }
   }
 
-  async function getArticlesHandler() {
-    const { data, error } = await ArticleRepository.index();
+  const mountErrorHandler = useCallback(
+    (error) => {
+      console.error(error.message);
+      toast({ title: error.message, status: 'error' });
+    },
+    [toast],
+  );
 
-    if (error) throw new Error('Não foi possível carregar o feed');
+  const getArticlesFeedHandler = useCallback(
+    async (limit: number, offset: number) => {
+      const { data, error } = await ArticleRepository.index(limit, offset);
 
-    setState((prevState) => ({ ...prevState, articles: data?.articles || [] }));
-  }
+      if (error) throw new Error('Não foi possível carregar o feed');
 
-  async function getTagsHandler() {
+      return { articles: data.articles, articlesCount: data.articlesCount };
+    },
+    [setState],
+  );
+
+  const getArticlesPersonalFeedHandler = useCallback(
+    async (limit: number, offset: number) => {
+      const { data, error } = await ArticleRepository.indexPersonalFeed(limit, offset);
+
+      if (error) throw new Error('Não foi possível carregar o feed pessoal');
+
+      return { articles: data.articles, articlesCount: data.articlesCount };
+    },
+    [setState],
+  );
+
+  const getTagsHandler = useCallback(async () => {
     const { data, error } = await TagRepository.index();
 
     if (error) throw new Error('Não foi possível carregar as tags');
 
     setState((prevState) => ({ ...prevState, tags: data?.tags || [] }));
-  }
+  }, [setState]);
 
   return {
     state,
     setState,
+    getArticlesFeedHandler,
+    getArticlesPersonalFeedHandler,
   };
 }

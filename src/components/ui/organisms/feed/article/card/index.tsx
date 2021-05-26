@@ -1,6 +1,6 @@
 import React from 'react';
 import { IArticle } from 'src/entities/Article';
-import { Badge, Box, Button, HStack, Icon, IconButton, Image, Stack, Text } from '@chakra-ui/react';
+import { Badge, Box, Button, HStack, Icon, Image, Stack, Text } from '@chakra-ui/react';
 import useFeedArticleCardController from './FeedArticleCardController';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 
@@ -59,13 +59,17 @@ function FeedArticleCard({ article }: { article: IArticle }): JSX.Element {
       </Button>
 
       <Box position={'absolute'} top={'1.25rem'} right={'1.25rem'}>
-        <IconButton
-          icon={<Icon as={controller.state.statedArticle.favorited ? MdFavorite : MdFavoriteBorder} />}
+        <Button
           colorScheme={controller.state.statedArticle.favorited ? 'teal' : undefined}
           aria-label={'favorite'}
           isLoading={controller.state.favoriteButtonLoading}
           onClick={() => controller.favoriteHandler(controller.state.statedArticle.slug)}
-        />
+        >
+          <HStack>
+            <Icon as={controller.state.statedArticle.favorited ? MdFavorite : MdFavoriteBorder} />
+            <Text>{controller.state.statedArticle.favoritesCount}</Text>
+          </HStack>
+        </Button>
       </Box>
     </Box>
   );

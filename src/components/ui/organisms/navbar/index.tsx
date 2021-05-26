@@ -11,7 +11,7 @@ const Navbar: React.FunctionComponent = ({ children }): JSX.Element => {
   return (
     <Stack minH={'100vh'} spacing={0}>
       <Box bg={'teal.600'}>
-        <HStack justifyContent={'space-between'} p={4} maxWidth={1200} mx={'auto'}>
+        <HStack justifyContent={'space-between'} py={4} maxWidth={1200} mx={'auto'}>
           <Text fontSize={'2xl'} fontWeight={'bold'} color={'white'}>
             VOJO Blog
           </Text>

@@ -1,5 +1,4 @@
 export interface IArticle {
-  UserEmail: string;
   author: { username: string; bio?: string; image?: string; following?: boolean };
   body: string;
   createdAt: string;

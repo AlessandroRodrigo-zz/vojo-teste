@@ -1,74 +1,51 @@
 import React from 'react';
 import useFeedController from './FeedController';
-import FeedArticleCard from 'src/components/ui/organisms/feed/article/card';
-import { Box, Button, HStack, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Wrap, WrapItem } from '@chakra-ui/react';
+import { Box, Button, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import FeedArticleList from 'src/components/ui/organisms/feed/article/list';
 
 function Feed(): JSX.Element {
   const controller = useFeedController();
 
   return (
     <Box bg={'gray.50'} flex={1}>
-      <Tabs colorScheme={'teal'} maxW={1200} mx={'auto'} mt={'8'}>
-        <TabList>
-          <Tab>Meu feed</Tab>
-          <Tab>Feed global</Tab>
-        </TabList>
+      <HStack align={'flex-start'} mt={'8'} maxW={1200} mx={'auto'} spacing={'4'}>
+        <Tabs w={'70%'} colorScheme={'teal'}>
+          <TabList>
+            <Tab>Meu feed</Tab>
+            <Tab>Feed global</Tab>
+          </TabList>
 
-        <TabPanels>
-          <TabPanel>
-            <HStack spacing={'4'} padding={4} maxW={1200} mx={'auto'} alignItems={'flex-start'} marginTop={'6'}>
-              <Stack spacing={'4'} w={'70%'}>
-                {controller.state.articles &&
-                  controller.state.articles.map((item) => <FeedArticleCard article={item} key={item.slug} />)}
-              </Stack>
-              <Box p={'5'} w={'30%'} bg={'white'} borderWidth={'1px'} borderRadius={'md'}>
-                <Wrap spacing={2}>
-                  {controller.state.tags &&
-                    controller.state.tags.map((item) => (
-                      <WrapItem key={item}>
-                        <Button
-                          size={'xs'}
-                          cursor={'pointer'}
-                          textTransform={'uppercase'}
-                          fontWeight={'bold'}
-                          borderRadius={'xl'}
-                        >
-                          {item}
-                        </Button>
-                      </WrapItem>
-                    ))}
-                </Wrap>
-              </Box>
-            </HStack>
-          </TabPanel>
-          <TabPanel>
-            <HStack spacing={'4'} padding={4} maxW={1200} mx={'auto'} alignItems={'flex-start'} marginTop={'6'}>
-              <Stack spacing={'4'} w={'70%'}>
-                {controller.state.articles &&
-                  controller.state.articles.map((item) => <FeedArticleCard article={item} key={item.slug} />)}
-              </Stack>
-              <Box p={'5'} w={'30%'} bg={'white'} borderWidth={'1px'} borderRadius={'md'}>
-                <Wrap spacing={2}>
-                  {controller.state.tags &&
-                    controller.state.tags.map((item) => (
-                      <WrapItem key={item}>
-                        <Button
-                          size={'xs'}
-                          cursor={'pointer'}
-                          textTransform={'uppercase'}
-                          fontWeight={'bold'}
-                          borderRadius={'xl'}
-                        >
-                          {item}
-                        </Button>
-                      </WrapItem>
-                    ))}
-                </Wrap>
-              </Box>
-            </HStack>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+          <TabPanels marginTop={'6'}>
+            <TabPanel p={0}>
+              <FeedArticleList fetchArticlesStrategy={controller.getArticlesPersonalFeedHandler} />
+            </TabPanel>
+            <TabPanel p={0}>
+              <FeedArticleList fetchArticlesStrategy={controller.getArticlesFeedHandler} />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+        <Box p={'5'} w={'30%'} bg={'white'} borderWidth={'1px'} borderRadius={'md'}>
+          <Text fontSize={'md'} fontWeight={'bold'} color={'gray.700'}>
+            Tags populares
+          </Text>
+          <Wrap spacing={2} mt={4}>
+            {controller.state.tags &&
+              controller.state.tags.map((item) => (
+                <WrapItem key={item}>
+                  <Button
+                    size={'xs'}
+                    cursor={'pointer'}
+                    textTransform={'uppercase'}
+                    fontWeight={'bold'}
+                    borderRadius={'xl'}
+                  >
+                    {item}
+                  </Button>
+                </WrapItem>
+              ))}
+          </Wrap>
+        </Box>
+      </HStack>
     </Box>
   );
 }
