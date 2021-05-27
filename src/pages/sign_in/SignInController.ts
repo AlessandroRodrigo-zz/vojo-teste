@@ -30,7 +30,7 @@ export default function useSignInController(): TSignInController {
 
       const createdSession = await SessionRepository.create({ email, password });
 
-      setUser({ ...createdSession.data.user });
+      setUser(createdSession.data.user);
 
       toast({
         title: 'Bem-vindo(a) de volta',

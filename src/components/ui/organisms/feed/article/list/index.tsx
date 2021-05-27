@@ -4,6 +4,7 @@ import FeedArticleCard from '../card';
 import useFeedArticleListController from './FeedArticleListController';
 import { IArticle } from 'src/entities/Article';
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
+import Pagination from 'src/components/ui/molecules/pagination';
 
 function FeedArticleList({
   fetchArticlesStrategy = async () => {
@@ -17,24 +18,20 @@ function FeedArticleList({
   return (
     <Stack spacing={'4'} padding={0} alignItems={'flex-start'} mb={4}>
       <Stack spacing={'4'} w={'100%'}>
-        {controller.state.articles &&
-          controller.state.articles.map((item) => <FeedArticleCard article={item} key={item.slug} />)}
+        {controller.state.articles.length ? (
+          controller.state.articles.map((item) => <FeedArticleCard article={item} key={item.slug} />)
+        ) : (
+          <Text>Ainda não há artigos disponíveis</Text>
+        )}
       </Stack>
-      <HStack spacing={4} justifyContent={'flex-end'} w={'100%'}>
-        <IconButton
-          onClick={() => controller.setCurrentPage(controller.state.page - 1)}
-          icon={<BiChevronLeft size={'20'} />}
-          aria-label="prev-page-button"
+
+      {controller.state.articles.length ? (
+        <Pagination
+          setCurrentPageHandler={controller.setCurrentPage}
+          currentPage={controller.state.page}
+          countTotalPages={controller.countTotalPages}
         />
-        <Text>
-          Página <b>{controller.state.page}</b> de {controller.countTotalPages}
-        </Text>
-        <IconButton
-          onClick={() => controller.setCurrentPage(controller.state.page + 1)}
-          icon={<BiChevronRight size={'20'} />}
-          aria-label="next-page-button"
-        />
-      </HStack>
+      ) : null}
     </Stack>
   );
 }

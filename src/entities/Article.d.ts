@@ -1,5 +1,6 @@
+import { IAuthor } from './Author.d';
 export interface IArticle {
-  author: { username: string; bio?: string; image?: string; following?: boolean };
+  author: IAuthor;
   body: string;
   createdAt: string;
   description: string;

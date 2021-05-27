@@ -1,8 +1,9 @@
 import React from 'react';
 import { IArticle } from 'src/entities/Article';
-import { Badge, Box, Button, HStack, Icon, Image, Stack, Text } from '@chakra-ui/react';
+import { Badge, Box, Button, HStack, Icon, Stack, Text } from '@chakra-ui/react';
 import useFeedArticleCardController from './FeedArticleCardController';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
+import AuthorBlockInfo from '../../../../atoms/author_block_info';
 
 function FeedArticleCard({ article }: { article: IArticle }): JSX.Element {
   const controller = useFeedArticleCardController(article);
@@ -18,23 +19,7 @@ function FeedArticleCard({ article }: { article: IArticle }): JSX.Element {
       position={'relative'}
       bg={'white'}
     >
-      <HStack spacing={'4'} alignItems={'flex-start'}>
-        <Image
-          src={controller.state.statedArticle.author.image ?? 'https://w.wallhaven.cc/full/28/wallhaven-2813r9.png'}
-          borderRadius={'50%'}
-          boxSize={50}
-          objectFit={'cover'}
-          alt={controller.state.statedArticle.author.username}
-        />
-        <Box>
-          <Text fontSize={'lg'} fontWeight={'bold'} color={'teal.600'}>
-            {controller.state.statedArticle.author.username}
-          </Text>
-          <Text fontSize={'sm'} color={'gray.500'}>
-            {controller.getFormattedCreatedAtArticle}
-          </Text>
-        </Box>
-      </HStack>
+      <AuthorBlockInfo article={controller.state.statedArticle} />
 
       <HStack mt={'3'} borderRadius={'lg'}>
         {controller.state.statedArticle.tagList &&
@@ -46,15 +31,30 @@ function FeedArticleCard({ article }: { article: IArticle }): JSX.Element {
       </HStack>
 
       <Stack marginTop={'4'} spacing={0}>
-        <Text noOfLines={2} fontSize={'xl'} fontWeight={'bold'} color={'gray.600'}>
+        <Button
+          maxW={'fit-content'}
+          variant={'link'}
+          noOfLines={2}
+          fontSize={'xl'}
+          fontWeight={'bold'}
+          color={'gray.600'}
+          onClick={controller.redirectToArticleHandler}
+        >
           {controller.state.statedArticle.title}
-        </Text>
+        </Button>
 
-        <Text noOfLines={4} fontSize={'md'} fontWeight={'normal'}>
+        <Button
+          onClick={controller.redirectToArticleHandler}
+          maxW={'fit-content'}
+          variant={'link'}
+          noOfLines={4}
+          fontSize={'md'}
+          fontWeight={'normal'}
+        >
           {controller.state.statedArticle.description}
-        </Text>
+        </Button>
       </Stack>
-      <Button mt={'2'} variant={'link'} w={'fit-content'}>
+      <Button onClick={controller.redirectToArticleHandler} mt={'2'} variant={'link'} w={'fit-content'}>
         Ler mais...
       </Button>
 

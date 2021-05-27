@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect, useContext, createContext, Dispatch, SetStateAction } from 'react';
 import { IArticle } from 'src/entities/Article';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useDefaultToast } from 'src/hooks/use_default_toast';
 import FavoriteRepository from 'src/repositories/FavoriteArticleRepository';
 import { AxiosResponse } from 'axios';
+import { useHistory } from 'react-router-dom';
 
 interface IFeedArticleCardControllerState {
   statedArticle: IArticle;
@@ -15,14 +16,19 @@ type TFeedArticleCardController = {
   getFormattedCreatedAtArticle: string;
   favoriteHandler: (slug: string) => Promise<void>;
   state: IFeedArticleCardControllerState;
+  redirectToArticleHandler: () => void;
 };
-
 export default function useFeedArticleCardController(article: IArticle): TFeedArticleCardController {
   const [state, setState] = useState<IFeedArticleCardControllerState>({
     statedArticle: article,
     favoriteButtonLoading: false,
   });
   const toast = useDefaultToast();
+  const history = useHistory();
+
+  useEffect(() => {
+    setState((prevState) => ({ ...prevState, statedArticle: article }));
+  }, [article]);
 
   const getFormattedCreatedAtArticle = useMemo(() => {
     return format(new Date(article.createdAt), 'MMM d, Y', { locale: ptBR });
@@ -78,9 +84,14 @@ export default function useFeedArticleCardController(article: IArticle): TFeedAr
     [state.statedArticle],
   );
 
+  const redirectToArticleHandler = useCallback(() => {
+    history.push({ pathname: `/article/${state.statedArticle.slug}` });
+  }, [state.statedArticle]);
+
   return {
     getFormattedCreatedAtArticle,
     favoriteHandler,
     state,
+    redirectToArticleHandler,
   };
 }

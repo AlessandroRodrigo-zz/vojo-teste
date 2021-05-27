@@ -12,7 +12,7 @@ const Navbar: React.FunctionComponent = ({ children }): JSX.Element => {
     <Stack minH={'100vh'} spacing={0}>
       <Box bg={'teal.600'}>
         <HStack justifyContent={'space-between'} py={4} maxWidth={1200} mx={'auto'}>
-          <Text fontSize={'2xl'} fontWeight={'bold'} color={'white'}>
+          <Text fontSize={'xl'} fontWeight={'bold'} color={'white'}>
             VOJO Blog
           </Text>
 
