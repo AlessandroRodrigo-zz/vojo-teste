@@ -10,4 +10,10 @@ export default class InputFeedbackMessageFactory {
 
     return 'Insira um e-mail válido, por favor';
   }
+
+  public static minCharacters(minValue: number, optionalMessage?: string): string {
+    if (optionalMessage) return optionalMessage;
+
+    return `Esse campo deve ter no mínimo ${minValue} caracteres`;
+  }
 }

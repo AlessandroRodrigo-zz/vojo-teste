@@ -6,51 +6,58 @@ import { useHistory } from 'react-router-dom';
 import { useDefaultToast } from '../../hooks/use_default_toast';
 import InputFeedbackMessageFactory from '../../utils/InputFeedbackMessageFactory';
 
-interface ISignUpControllerState {
-  loading: boolean;
-}
-
 type TSignUpController = {
   submitFormHandler: (formValues: { email: string; username: string; password: string }) => void;
-  state: ISignUpControllerState;
   formValidateRules: {};
 };
 
+type TSignUpForm = {
+  email: string;
+  username: string;
+  password: string;
+};
+
 export default function useSignUpController(): TSignUpController {
-  const [state, setState] = useState<ISignUpControllerState>({ loading: false });
   const { setUser } = useUser();
   const history = useHistory();
   const toast = useDefaultToast();
 
-  const submitFormHandler = useCallback(
-    async ({ username, email, password }: { email: string; username: string; password: string }) => {
-      try {
-        setState((prevState) => ({ ...prevState, loading: true }));
+  const submitFormHandler = useCallback(async (formValues: TSignUpForm) => {
+    try {
+      await createUser(formValues);
+    } catch (e) {
+      errorHandler(e);
+    }
+  }, []);
 
-        const createdUser = await UserRepository.create({ username, password, email });
+  const createUser = useCallback(
+    async (formValues: TSignUpForm) => {
+      const { error, data } = await UserRepository.create(formValues);
 
-        setUser({ ...createdUser.data.user });
+      if (error) throw new Error('Não foi possível realizar o registro');
 
-        toast({
-          title: 'Cadastro realizado com sucesso!',
-          description: 'Parabéns, agora você será redirecionado para o seu feed',
-          status: 'success',
-        });
+      setUser(data.user);
 
-        history.push({ pathname: '/' });
-      } catch (e) {
-        console.error(e);
-        toast({
-          title: 'Não foi possível realizar o cadastro',
-          description: 'Tente novamente em alguns instantes',
-          status: 'error',
-        });
-      } finally {
-        setState((prevState) => ({ ...prevState, loading: false }));
-      }
+      toast({
+        title: 'Cadastro realizado com sucesso!',
+        description: 'Parabéns, agora você será redirecionado para o seu feed',
+        status: 'success',
+      });
+
+      history.push({ pathname: '/' });
     },
-    [],
+    [setUser],
   );
+
+  const errorHandler = useCallback((error: Error) => {
+    console.error(error.message);
+
+    toast({
+      title: error.message,
+      description: 'Por favor, tente novamente em alguns instantes',
+      status: 'error',
+    });
+  }, []);
 
   const formValidateRules: {} = useMemo(() => {
     return yup.object().shape({
@@ -59,12 +66,14 @@ export default function useSignUpController(): TSignUpController {
         .email(InputFeedbackMessageFactory.emailFeedbackFactory())
         .required(InputFeedbackMessageFactory.requiredFeedbackFactory('e-mail')),
       username: yup.string().required(InputFeedbackMessageFactory.requiredFeedbackFactory('usuário')),
-      password: yup.string().required(InputFeedbackMessageFactory.requiredFeedbackFactory('senha')),
+      password: yup
+        .string()
+        .min(8, InputFeedbackMessageFactory.minCharacters(8))
+        .required(InputFeedbackMessageFactory.requiredFeedbackFactory('senha')),
     });
   }, []);
 
   return {
-    state,
     submitFormHandler,
     formValidateRules,
   };

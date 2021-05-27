@@ -1,36 +1,42 @@
 import { useCallback, useMemo, useState } from 'react';
 import * as yup from 'yup';
-import SessionRepository from '../../repositories/SessionRepository';
-import { useUser } from '../../hooks/use_user';
-import { useDefaultToast } from '../../hooks/use_default_toast';
+import SessionRepository from 'src/repositories/SessionRepository';
+import { useUser } from 'src/hooks/use_user';
+import { useDefaultToast } from 'src/hooks/use_default_toast';
 import { useHistory } from 'react-router-dom';
-import InputFeedbackMessageFactory from '../../utils/InputFeedbackMessageFactory';
-import Feed from '../feed';
-
-interface ISignInControllerState {
-  loading: boolean;
-}
+import InputFeedbackMessageFactory from 'src/utils/InputFeedbackMessageFactory';
 
 type TSignInController = {
-  state: ISignInControllerState;
   submitFormHandler: (formValues: { email: string; password: string }) => void;
   formValidateRules: {};
 };
 
+type TSignInForm = {
+  email: string;
+  password: string;
+};
+
 export default function useSignInController(): TSignInController {
-  const [state, setState] = useState<ISignInControllerState>({ loading: false });
   const toast = useDefaultToast();
   const history = useHistory();
 
   const { setUser } = useUser();
 
-  const submitFormHandler = useCallback(async ({ email, password }: { email: string; password: string }) => {
+  const submitFormHandler = useCallback(async (formValues: TSignInForm) => {
     try {
-      setState((prevState) => ({ ...prevState, loading: true }));
+      await createSession(formValues);
+    } catch (e) {
+      errorHandler(e);
+    }
+  }, []);
 
-      const createdSession = await SessionRepository.create({ email, password });
+  const createSession = useCallback(
+    async (formValues: TSignInForm) => {
+      const { data, error } = await SessionRepository.create(formValues);
 
-      setUser(createdSession.data.user);
+      if (error) throw new Error('Não foi possível realizar login');
+
+      setUser(data.user);
 
       toast({
         title: 'Bem-vindo(a) de volta',
@@ -39,16 +45,18 @@ export default function useSignInController(): TSignInController {
       });
 
       history.push({ pathname: '/' });
-    } catch (e) {
-      console.error(e);
-      toast({
-        title: 'Não foi possível acessar a conta',
-        description: 'Por favor, tente novamente em alguns instantes',
-        status: 'error',
-      });
-    } finally {
-      setState((prevState) => ({ ...prevState, loading: false }));
-    }
+    },
+    [setUser, history],
+  );
+
+  const errorHandler = useCallback((error: Error) => {
+    console.error(error.message);
+
+    toast({
+      title: error.message,
+      description: 'Por favor, tente novamente em alguns instantes',
+      status: 'error',
+    });
   }, []);
 
   const formValidateRules: {} = useMemo(() => {
@@ -62,7 +70,6 @@ export default function useSignInController(): TSignInController {
   }, []);
 
   return {
-    state,
     submitFormHandler,
     formValidateRules,
   };

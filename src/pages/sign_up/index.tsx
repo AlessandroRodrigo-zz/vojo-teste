@@ -23,8 +23,9 @@ function SignUp(): JSX.Element {
           validationSchema={controller.formValidateRules}
           validateOnChange
           validateOnBlur
+          validateOnMount
         >
-          {({ handleSubmit, handleChange, handleBlur, errors, touched }) => (
+          {({ handleSubmit, handleChange, handleBlur, errors, touched, isValid, isSubmitting }) => (
             <form onSubmit={handleSubmit}>
               <Box rounded={'lg'} bg={'white'} boxShadow={'lg'} p={8}>
                 <Stack spacing={4}>
@@ -64,7 +65,13 @@ function SignUp(): JSX.Element {
                     <Stack direction={{ base: 'column', sm: 'row' }} align={'start'} justify={'space-between'}>
                       <Checkbox colorScheme={'teal'}>Lembrar minha conta</Checkbox>
                     </Stack>
-                    <Button isLoading={controller.state.loading} colorScheme={'teal'} color={'white'} type={'submit'}>
+                    <Button
+                      isLoading={isSubmitting}
+                      disabled={!isValid}
+                      colorScheme={'teal'}
+                      color={'white'}
+                      type={'submit'}
+                    >
                       Criar conta
                     </Button>
                   </Stack>
